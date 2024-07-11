@@ -1,19 +1,18 @@
 import { toMobx } from "@chaoswise/cw-mobx";
 import { message } from "@chaoswise/ui";
-import { airList,airDelete,airAdd,airUpdate,airSearch } from "@/services/airServices";
+import { orderListPage,orderAdd,getbrandbyid,getairidbrand,orderSearch,orderDelete } from "@/services/airOrderServices";
 
 
 // 设置数据接收
 const model = {
-    namespace: 'airStore',
+    namespace: 'airOrderStore',
     state: {
         listData:{},
         // inputSearchName:'',
     },
     effects:{
-        //获取分页数据方法并判定成功
         *getList(params) {
-            const res = yield airList(params);
+            const res = yield orderListPage(params);
             if (res?.code === 100000){
                 console.log("-------------------------");
                 console.log("res====>",res);
@@ -22,7 +21,7 @@ const model = {
             }
             else{
                 message.error(
-                    (res && res.msg) || '空调列表获取失败'
+                    (res && res.msg) || '商品列表获取失败'
                 );
                 console.log("获取失败");
                 console.log("res====>",res);
@@ -34,32 +33,8 @@ const model = {
             )
             ;
         },
-        // 删除方法并判定是否成功
-        *deleted(params){
-            console.log("params====>",params);
-            const res = yield airDelete(params);
-            if (res?.code === 100000){
-                console.log("-------------------------");
-                console.log("res====>",res);
-                console.log("删除成功");
-            }
-            else{
-                message.error(
-                    (res && res.msg) || '删除失败'
-                );
-                console.log("删除失败");
-                console.log("res====>",res);
-                console.log("-------------------------");
-            }
-            console.log("res222====>",res);
-            return (
-                res
-            )
-            ;
-        },
-        // 新增方法并判定是否成功
         *added(params){
-            const res = yield airAdd(params);
+            const res = yield orderAdd(params);
             if (res?.code === 100000){
                 console.log("-------------------------");
                 console.log("新增成功");
@@ -76,31 +51,55 @@ const model = {
             console.log("res222====>",res);
             return (
                 res
-            );
+            )
+            ;
         },
-        // 修改方法并判定是否成功
-        *updated(params){
-            const res = yield airUpdate(params);
+        *airListget() {
+            const res = yield getairidbrand();
             if (res?.code === 100000){
                 console.log("-------------------------");
-                console.log("修改成功");
                 console.log("res====>",res);
+                console.log("获取成功");
+                // this.listData = res.data;
             }
             else{
                 message.error(
-                    (res && res.msg) || '修改失败'
+                    (res && res.msg) || '商品列表获取失败'
                 );
-                console.log("修改失败");
+                console.log("获取失败");
                 console.log("res====>",res);
                 console.log("-------------------------");
             }
             console.log("res222====>",res);
             return (
                 res
-            );
+            )
+            ;
+        },
+        *brandget(params) {
+            const res = yield getbrandbyid(params);
+            if (res?.code === 100000){
+                console.log("-------------------------");
+                console.log("res====>",res);
+                console.log("获取成功");
+                // this.listData = res.data;
+            }
+            else{
+                message.error(
+                    (res && res.msg) || '商品列表获取失败'
+                );
+                console.log("获取失败");
+                console.log("res====>",res);
+                console.log("-------------------------");
+            }
+            console.log("res222====>",res);
+            return (
+                res
+            )
+            ;
         },
         *searched(params){
-            const res = yield airSearch(params);
+            const res = yield orderSearch(params);
             if (res?.code === 100000){
                 console.log("-------------------------");
                 console.log("查询成功");
@@ -112,6 +111,26 @@ const model = {
                     (res && res.msg) || '查询失败'
                 );
                 console.log("查询失败");
+                console.log("res====>",res);
+                console.log("-------------------------");
+            }
+            console.log("res222====>",res);
+            return (
+                res
+            );
+        },
+        *deleted(params){
+            const res = yield orderDelete(params);
+            if (res?.code === 100000){
+                console.log("-------------------------");
+                console.log("删除成功");
+                console.log("res====>",res);
+            }
+            else{
+                message.error(
+                    (res && res.msg) || '删除失败'
+                );
+                console.log("删除失败");
                 console.log("res====>",res);
                 console.log("-------------------------");
             }

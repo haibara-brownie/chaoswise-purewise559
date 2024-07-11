@@ -58,6 +58,21 @@ module.exports = {
 						},
 					],
 				},
+				{
+					icon: "unordered-list",
+					name: "空调订单",
+					path: "/airorder",
+					component: "@/pages/AirOrder",
+					routes: [
+					{
+						icon: "appstore",
+						name: "订单列表",
+						path: "/airorder/airorderlist",
+						parentPath: "/airorder",
+						component: "@/pages/AirOrder/AirOrderList",
+					}
+					],
+				},
 				{ from: "/", to: "/log-audit/login-log" },
 			],
 		},

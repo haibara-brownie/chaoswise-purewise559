@@ -1,4 +1,4 @@
-import { fetchPost} from "@chaoswise/request/lib/fetch/methods";
+import { fetchPost,fetchDelete,fetchGet} from "@chaoswise/request/lib/fetch/methods";
 
 
 const API = "/gateway/local559";
@@ -31,7 +31,7 @@ export function airDelete(params){
 
 
 // 修改数据方法
-export function airUpdata(
+export function airUpdate(
     params = {}
 ){
 

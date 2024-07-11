@@ -62,7 +62,17 @@ const AirList = observer(() => {
 
 //修改modal部分
     const [visibleUp, setVisibleUp] = useState(false);
-    const showModalUp = () => {
+    const showModalUp = (record) => {
+        // console.log("修改的记录", record);
+        setFormUpData({
+            // ...formUpData,
+            aid: record.aid || '',
+            brand: record.brand || '',
+            color: record.color || '',
+            level: record.level || '',
+            model: record.model || '',
+            price: record.price || '',
+        });
         setVisibleUp(true);
     }
     const handleCloseUp = () => {
@@ -79,7 +89,10 @@ const AirList = observer(() => {
     const handleSubmitUp = (formdataup) => {
         console.log("提交的内容", formUpData);
         store.added(formdataup=formUpData);
-        getAirList();
+        getAirList({
+            current: current,
+			size: size,
+        });
         setVisibleUp(false);
     }
 
@@ -223,13 +236,14 @@ const AirList = observer(() => {
             title: "操作",
             dataIndex: "actions",
             keys: "actions",
-            render:(text,record) => {
+            render:(_,record) => {
+                // console.log("recordrender===>",record);
                 return (
                     <>
                     <Button
                         type="primary"
                         onClick={showModalUp}
-                        style={{marginRight: 10}}>
+                        style={{marginRight: 20}}>
                             修改
                     </Button>
                     <Popconfirm
@@ -249,9 +263,10 @@ const AirList = observer(() => {
 //删除按钮部分
     function deleteClick(record) {
         console.log("record===>",record);
-        let deleteIdmsg=store.deleted(record.carId);
+        let deleteIdmsg=store.deleted(record.aid);
         console.log(deleteIdmsg);
         getAirList();
+        // window.location.reload();
     }
 //获取数据部分
 	const getAirList = useCallback(
@@ -270,12 +285,27 @@ const AirList = observer(() => {
 		});
 	}, [getAirList, current, size]);
 
+        // const [reco,setReco] = useState([]);
+
 	const onSearch = (searchParams, current, size) => {
-		getAirList({
-			current: current,
-			size: size,
-			...searchParams,
-		});
+        // console.log("searchParams===>",searchParams);
+        // store.searched(searchParams.searchinput).then((res)=>{
+        //     console.log("res===>aaaa",res.data);
+        //     setReco(...reco,res.data);
+
+        // })
+		console.log("searchParams===>",searchParams);
+        console.log("current===>",current);
+        console.log("size===>",size);
+        let newse = {
+            current: current,
+            size: size,
+            brand: searchParams.searchinput,
+        }
+        console.log("newse===>",newse);
+        store.searched(newse).then((res)=>{
+            console.log("newse返回res===>",res.data);
+        })
 	};
 
 	const changePage = (current, size, searchParams) => {
@@ -293,8 +323,8 @@ const AirList = observer(() => {
                         <Input
                             id="searchinput"
                             key="searchinput"
-                            placeholder={"输入搜索内容"}
-                            name={"搜索框"}
+                            placeholder={"输入商品id例：AC001"}
+                            name={"id查询数据"}
                             allowClear
                         />
 				),
@@ -329,7 +359,7 @@ const AirList = observer(() => {
                                 <Button
                                     onClick={showaddModal}
                                     type="primary">
-                                    {"新增"}
+                                    {"新增空调"}
                                 </Button>
                                 {/* <GetAuth
                                     key="Export"
