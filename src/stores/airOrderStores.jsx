@@ -120,6 +120,7 @@ const model = {
             );
         },
         *deleted(params){
+            console.log("shanchupar====>",params);
             const res = yield orderDelete(params);
             if (res?.code === 100000){
                 console.log("-------------------------");

@@ -42,7 +42,7 @@ module.exports = {
         }
 			},
 			{
-				context: ["/docp/gateway", "/gateway", "/api", "/docp/douc","douc"],
+				context: ["/docp/gateway", "/gateway", "/api", "/docp/douc","/douc"],
 				// target: "http://10.0.12.137:18080",
 				target: "http://10.102.3.51:18080",
 				changeOrigin: true,

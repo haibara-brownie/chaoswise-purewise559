@@ -105,6 +105,13 @@ const model = {
                 console.log("-------------------------");
                 console.log("查询成功");
                 console.log("res====>",res);
+                // const resData = {
+                //     current: params.current,
+                //     total: params.total,
+                //     records: res.data,
+                //     size: params.size,
+                // }
+                // this.listData = resData;
                 this.listData = res.data;
             }
             else{

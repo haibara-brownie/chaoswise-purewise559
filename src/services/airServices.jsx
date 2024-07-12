@@ -43,8 +43,14 @@ export function airUpdate(
 
 
 // 查询数据方法
-export function airSearch(params){
+export function airSearch(params = {}){
     return fetchPost(
-        `${API}/air/backsearch/${params}`,
+        `${API}/air/backSearchParams/`,
+        {body: params},
     );
 }
+// export function airSearch(params){
+//     return fetchPost(
+//         `${API}/air/backsearch/${params}`,
+//     );
+// }

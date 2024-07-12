@@ -62,8 +62,10 @@ const LoginLog = observer(() => {
 
       await getList(params);
       setLoading(false);
+      console.log("listData", listData);
     },
     [getList]
+
   );
 
   useEffect(() => {

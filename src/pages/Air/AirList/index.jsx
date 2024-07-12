@@ -18,12 +18,13 @@ const AirList = observer(() => {
 
     //初始化新增表单的数据
     const [formData, setFormData] = useState({
-        aid: '',
+        airId: '',
         brand: '',
         color: '',
         level: '',
         model: '',
         price: '',
+        createId: '',
     });
 
     //新增modal部分
@@ -52,12 +53,13 @@ const AirList = observer(() => {
 
 //初始化修改表单的数据
     const [formUpData, setFormUpData] = useState({
-        aid: '666',
+        airId: '666',
         brand: '666',
         color: '666',
         level: '666',
         model: '666',
         price: '666',
+        createId: '666',
     });
 
 //修改modal部分
@@ -66,12 +68,13 @@ const AirList = observer(() => {
         // console.log("修改的记录", record);
         setFormUpData({
             // ...formUpData,
-            aid: record.aid || '',
+            airId: record.airId || '',
             brand: record.brand || '',
             color: record.color || '',
             level: record.level || '',
             model: record.model || '',
             price: record.price || '',
+            createId: record.createId || '1',
         });
         setVisibleUp(true);
     }
@@ -100,10 +103,10 @@ const AirList = observer(() => {
 	const columns = [
 		{
 			title: "空调编号",
-			dataIndex: "aid",
-			key: "aid",
-			sorter: (a, b) => a.aid - b.aid,
-			sortDirections: ["descend", "ascend", undefined],
+			dataIndex: "airId",
+			key: "airId",
+			// sorter: (a, b) => a.airId - b.airId,
+			// sortDirections: ["descend", "ascend", undefined],
 			render: (text) => {
 				return (
                     //气泡提示
@@ -192,8 +195,8 @@ const AirList = observer(() => {
 		},
 		{
 			title: "创建人",
-			dataIndex: "create_name",
-			key: "create_name",
+			dataIndex: "createName",
+			key: "createName",
 			render: (text) => {
 				return (
 					<Tooltip
@@ -206,8 +209,8 @@ const AirList = observer(() => {
 		},
         {
 			title: "创建时间",
-			dataIndex: "create_time",
-			key: "create_time",
+			dataIndex: "createTime",
+			key: "createTime",
 			render: (text) => {
 				return (
 					<Tooltip
@@ -220,8 +223,8 @@ const AirList = observer(() => {
 		},
         {
 			title: "修改时间",
-			dataIndex: "update_time",
-			key: "update_time",
+			dataIndex: "updateTime",
+			key: "updateTime",
 			render: (text) => {
 				return (
 					<Tooltip
@@ -242,7 +245,7 @@ const AirList = observer(() => {
                     <>
                     <Button
                         type="primary"
-                        onClick={showModalUp}
+                        onClick={() =>showModalUp(record)}
                         style={{marginRight: 20}}>
                             修改
                     </Button>
@@ -263,7 +266,7 @@ const AirList = observer(() => {
 //删除按钮部分
     function deleteClick(record) {
         console.log("record===>",record);
-        let deleteIdmsg=store.deleted(record.aid);
+        let deleteIdmsg=store.deleted(record.airId);
         console.log(deleteIdmsg);
         getAirList();
         // window.location.reload();
@@ -274,6 +277,7 @@ const AirList = observer(() => {
 			setLoading(true);
 			await getList(params);
 			setLoading(false);
+            console.log("getAirList===>",listData);
 		},
 		[getList]
 	);
@@ -287,23 +291,29 @@ const AirList = observer(() => {
 
         // const [reco,setReco] = useState([]);
 
-	const onSearch = (searchParams, current, size) => {
+	const onSearch = (searchParams) => {
         // console.log("searchParams===>",searchParams);
         // store.searched(searchParams.searchinput).then((res)=>{
         //     console.log("res===>aaaa",res.data);
         //     setReco(...reco,res.data);
 
         // })
-		console.log("searchParams===>",searchParams);
-        console.log("current===>",current);
-        console.log("size===>",size);
-        let newse = {
+		// console.log("searchParams===>",searchParams);
+        // let newse = {
+        //     current: current,
+        //     size: size,
+        //     brand: searchParams.searchinput,
+        // }
+        // console.log("newse===>",newse);
+        console.log("searchParams.inp===>",searchParams.searchinput);
+        let newse = searchParams.searchinput;
+        console.log("newse===>",newse);
+        const searchmsg = {
             current: current,
             size: size,
-            brand: searchParams.searchinput,
+            brand: newse,
         }
-        console.log("newse===>",newse);
-        store.searched(newse).then((res)=>{
+        store.searched(searchmsg).then((res)=>{
             console.log("newse返回res===>",res.data);
         })
 	};
@@ -323,8 +333,8 @@ const AirList = observer(() => {
                         <Input
                             id="searchinput"
                             key="searchinput"
-                            placeholder={"输入商品id例：AC001"}
-                            name={"id查询数据"}
+                            placeholder={"输入空调品牌例：Geli"}
+                            name={"空调品牌查询数据"}
                             allowClear
                         />
 				),
@@ -388,11 +398,11 @@ const AirList = observer(() => {
                 <Form
                     layout="vertical"
                 >
-{/* aid */}
+{/* airId */}
                     <Form.Item
                         label="空调编号"
-                        help={formData.aid.length > 0 ? "" : "请输入空调编号"}
-                        validateStatus={formData.aid.length > 0 ? "success" : "error"}
+                        help={formData.airId !== "" ? "" : "请输入空调编号"}
+                        validateStatus={formData.airId !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -405,8 +415,8 @@ const AirList = observer(() => {
                             }}
                         >
                             <Input
-                                name="aid"
-                                value={formData.aid}
+                                name="airId"
+                                value={formData.airId}
                                 showCount
                                 onChange={handleInputChange}
                             />
@@ -415,8 +425,8 @@ const AirList = observer(() => {
 {/* 空调品牌 */}
                     <Form.Item
                         label="空调品牌"
-                        help={formData.brand.length > 0 ? "" : "请输入空调品牌"}
-                        validateStatus={formData.brand.length > 0 ? "success" : "error"}
+                        help={formData.brand !== "" ? "" : "请输入空调品牌"}
+                        validateStatus={formData.brand !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -439,8 +449,8 @@ const AirList = observer(() => {
 {/* 空调颜色 */}
                     <Form.Item
                         label="空调颜色"
-                        help={formData.color.length > 0 ? "" : "请输入空调颜色"}
-                        validateStatus={formData.color.length > 0 ? "success" : "error"}
+                        help={formData.color !== "" ? "" : "请输入空调颜色"}
+                        validateStatus={formData.color !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -463,15 +473,15 @@ const AirList = observer(() => {
 {/* 节能等级 */}
                     <Form.Item
                         label="节能等级"
-                        help={formData.level.length > 0 ? "" : "请输入生产日期"}
-                        validateStatus={formData.level.length > 0 ? "success" : "error"}
+                        help={formData.level !== "" ? "" : "请输入节能等级"}
+                        validateStatus={formData.level !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
-                            placeholder="这里填写生产日期"
+                            placeholder="请这里填写节能等级"
                             iconOption={{
                                 icon:
-                                <Tooltip title="生产日期是时间">
+                                <Tooltip title="节能等级是整型">
                                     <Icon type="question-circle" />
                                 </Tooltip>,
                             }}
@@ -487,8 +497,8 @@ const AirList = observer(() => {
 {/* 空调型号 */}
                     <Form.Item
                         label="空调型号"
-                        help={formData.model.length > 0 ? "" : "请输入空调型号"}
-                        validateStatus={formData.model.length > 0 ? "success" : "error"}
+                        help={formData.model !== "" ? "" : "请输入空调型号"}
+                        validateStatus={formData.model !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -511,8 +521,8 @@ const AirList = observer(() => {
 {/* 空调单价 */}
                     <Form.Item
                         label="空调单价(k)"
-                        help={formData.price.length > 0 ? "" : "请输入单价"}
-                        validateStatus={formData.price.length > 0 ? "success" : "error"}
+                        help={formData.price !== "" ? "" : "请输入单价"}
+                        validateStatus={formData.price !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -547,11 +557,11 @@ const AirList = observer(() => {
                 <Form
                     layout="vertical"
                 >
-{/* aid */}
+{/* airId */}
                     <Form.Item
                         label="空调编号"
-                        help={formUpData.aid.length > 0 ? "" : "请输入空调编号"}
-                        validateStatus={formUpData.aid.length > 0 ? "success" : "error"}
+                        help={formUpData.airId !== "" ? "" : "请输入空调编号"}
+                        validateStatus={formUpData.airId !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -564,9 +574,10 @@ const AirList = observer(() => {
                             }}
                         >
                             <Input
-                                name="aid"
-                                value={formUpData.aid}
+                                name="airId"
+                                value={formUpData.airId}
                                 showCount
+                                readOnly
                                 onChange={handleInputChangeUp}
                             />
                         </FormItemWrapper>
@@ -574,8 +585,8 @@ const AirList = observer(() => {
 {/* 空调品牌 */}
                     <Form.Item
                         label="空调品牌"
-                        help={formUpData.brand.length > 0 ? "" : "请输入空调品牌"}
-                        validateStatus={formUpData.brand.length > 0 ? "success" : "error"}
+                        help={formUpData.brand !== "" ? "" : "请输入空调品牌"}
+                        validateStatus={formUpData.brand !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -598,8 +609,8 @@ const AirList = observer(() => {
 {/* 空调颜色 */}
                     <Form.Item
                         label="空调颜色"
-                        help={formUpData.color.length > 0 ? "" : "请输入空调颜色"}
-                        validateStatus={formUpData.color.length > 0 ? "success" : "error"}
+                        help={formUpData.color !== "" ? "" : "请输入空调颜色"}
+                        validateStatus={formUpData.color !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -622,15 +633,15 @@ const AirList = observer(() => {
 {/* 节能等级 */}
                     <Form.Item
                         label="节能等级"
-                        help={formUpData.level.length > 0 ? "" : "请输入生产日期"}
-                        validateStatus={formUpData.level.length > 0 ? "success" : "error"}
+                        help={formUpData.level !== "" ? "" : "请输入节能等级"}
+                        validateStatus={formUpData.level !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
-                            placeholder="这里填写生产日期"
+                            placeholder="这里写节能等级"
                             iconOption={{
                                 icon:
-                                <Tooltip title="生产日期是时间">
+                                <Tooltip title="节能等级是字符串">
                                     <Icon type="question-circle" />
                                 </Tooltip>,
                             }}
@@ -646,8 +657,8 @@ const AirList = observer(() => {
 {/* 空调型号 */}
                     <Form.Item
                         label="空调型号"
-                        help={formUpData.model.length > 0 ? "" : "请输入空调型号"}
-                        validateStatus={formUpData.model.length > 0 ? "success" : "error"}
+                        help={formUpData.model !== "" ? "" : "请输入空调型号"}
+                        validateStatus={formUpData.model !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper
@@ -670,8 +681,8 @@ const AirList = observer(() => {
 {/* 空调单价 */}
                     <Form.Item
                         label="空调单价(k)"
-                        help={formUpData.price.length > 0 ? "" : "请输入单价"}
-                        validateStatus={formUpData.price.length > 0 ? "success" : "error"}
+                        help={formUpData.price !== "" ? "" : "请输入单价"}
+                        validateStatus={formUpData.price !== "" ? "success" : "error"}
                         required
                     >
                         <FormItemWrapper

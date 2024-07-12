@@ -1,7 +1,7 @@
 import { fetchPost, fetchDelete, fetchGet } from "@chaoswise/request/lib/fetch/methods";
 
 
-const API = "/gateway/local";
+const API = "/gateway/local559";
 
 //分页展示方法
 export function orderListPage(
@@ -37,14 +37,22 @@ export function getairidbrand(){
 }
 
 // 查询数据方法
-export function orderSearch(params){
+// export function orderSearch(params){
+//     return fetchPost(
+//         `${API}/orders/backsearch/${params}`,
+//     );
+// }
+export function orderSearch(params={}){
     return fetchPost(
-        `${API}/orders/backsearch/${params}`,
+        `${API}/orders/backSearchParams/`,
+        {body: params},
     );
 }
+
 //删除数据方法
 export function orderDelete(params){
-    return fetchDelete(
+    console.log("shanchupar====>",params);
+    return fetchPost(
         `${API}/orders/backdelete/${params}`,
     );
 }
